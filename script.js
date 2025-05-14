@@ -1,14 +1,3 @@
-// ====== Visual, step‑by‑step BFS / DFS for the directed graph ======
-// — works on any HTML page that has a <canvas id="canvas"> element and two
-//   buttons with id="btnDirected" and id="btnUndirected".
-// — adds BFS / DFS / Next‑Step / Reset buttons dynamically.
-// — draws:                ◉ the original graph (left‑hand side)
-//                          ◉ the traversal tree as a separate diagram (right‑hand side)
-// — does **not** rename any of your identifiers – only restructures the code
-//   and fixes braces / scoping errors.
-
-/* global document, console */
-
 document.addEventListener("DOMContentLoaded", () => {
     const canvas  = document.getElementById("canvas");
     const ctx     = canvas.getContext("2d");
@@ -23,10 +12,10 @@ document.addEventListener("DOMContentLoaded", () => {
     // Canvas helpers
     const w = canvas.width;
     const h = canvas.height;
-    const RAD = 20;
+    const RAD = 15;
     const centerX = w / 2;
     const centerY = h / 2;
-    const radius  = 280;
+    const radius  = 180;
 
     // ───────────────────── RNG (Park–Miller) ─────────────────────
     function genRand(seed) {
@@ -244,10 +233,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // ───────────────────── Traversal tree – separate drawing ─────────────────────
     function drawTraversalTreeSeparate() {
-        const offsetX   = w - 320;   // right margin for tree
+        const offsetX  = w * 0.55;   // right margin for tree
         const offsetY   = 40;
-        const spacingX  = 120;
-        const spacingY  = 100;
+        const spacingX  = 100;
+        const spacingY  = 80;
 
         if (!traversalTree.length) return;
 
