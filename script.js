@@ -129,7 +129,7 @@ document.addEventListener("DOMContentLoaded", () => {
         ctx.strokeStyle = color;
         ctx.fillStyle = color;
         const arcR = RAD * 0.85;
-        const offset = RAD + 9;
+        const offset = RAD + 7.5;
         const dx = nodeX - centerX;
         const dy = nodeY - centerY;
         let theta = Math.atan2(dy, dx) * 180 / Math.PI;
@@ -402,10 +402,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 const treeMatrix = createTreeMatrix();
                 printMatrix(treeMatrix, 'Tree matrix of BFS');
-
-                console.log("\nVertex visiting order (starting from 1):");
-                console.log(order.map(v => v + 1).join(" -> "));
-
+                console.log("\nOrder of BFS:", order.map(v => v + 1).join(" → "));
                 return;
             }
             visited[next] = "discovered";
@@ -439,7 +436,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 btnNextStep.disabled = true;
                 drawGraph(matrix, true);
                 printMatrix(createTreeMatrix(), "Tree matrix of DFS");
-                console.log("\nOrder:", order.map(v => v + 1).join(" → "));
+                console.log("\nOrder of DFS:", order.map(v => v + 1).join(" → "));
                 return;
             }
             visited[next] = "discovered";
