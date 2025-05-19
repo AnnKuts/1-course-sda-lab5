@@ -401,7 +401,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 drawGraph(matrix, true);
 
                 const treeMatrix = createTreeMatrix();
-                printMatrix(treeMatrix, 'Tree adjacency matrix');
+                printMatrix(treeMatrix, 'Tree matrix of BFS');
 
                 console.log("\nVertex visiting order (starting from 1):");
                 console.log(order.map(v => v + 1).join(" -> "));
@@ -438,7 +438,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (next === -1) {
                 btnNextStep.disabled = true;
                 drawGraph(matrix, true);
-                printMatrix(createTreeMatrix(), "Tree adjacency (DFS)");
+                printMatrix(createTreeMatrix(), "Tree matrix of DFS");
                 console.log("\nOrder:", order.map(v => v + 1).join(" → "));
                 return;
             }
