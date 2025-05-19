@@ -202,8 +202,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 const isTreeEdge = traversalTree.some(e => e.from === i && e.to === j);
                 const isHighlighted = highlightEdges.some(e => e.from === i && e.to === j);
                 let edgeColor = COLORS.edge.normal;
-                if (isTreeEdge) edgeColor = COLORS.edge.tree;   // pink
-                if (isHighlighted) edgeColor = COLORS.edge.highlight;   // orange
+                if (isTreeEdge) edgeColor = COLORS.edge.tree;
+                if (isHighlighted) edgeColor = COLORS.edge.highlight;
 
                 const p1 = positions[i];
                 const p2 = positions[j];
@@ -270,7 +270,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function drawTraversalTreeSeparate() {
-        const offsetX = w * 0.8;   // Посунув вправо (було 0.75)
+        const offsetX = w * 0.8;
         const spacingX = 60;
         const spacingY = 70;
 
@@ -385,7 +385,7 @@ document.addEventListener("DOMContentLoaded", () => {
         console.clear();
         traversalMode = "DFS";
         const start = findStartVertex(matrix);
-        printMatrix(matrix, "Directed Matrix of DFS");
+        printMatrix(matrix, "Directed matrix of DFS");
         console.log(`\nStarting DFS from vertex ${start + 1}`);
         visited[start] = "discovered";
         traversalStack.push(start);
