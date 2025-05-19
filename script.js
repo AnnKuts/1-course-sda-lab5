@@ -321,7 +321,6 @@ document.addEventListener("DOMContentLoaded", () => {
             ctx.fillStyle = COLORS.node.visited;
             ctx.arc(p.x, p.y, RAD, 0, Math.PI * 2);
             ctx.fill();
-            // No stroke call here
             ctx.fillStyle = "#fff";
             ctx.textAlign = "center";
             ctx.textBaseline = "middle";
@@ -330,7 +329,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function createTreeMatrix() {
-        // Створення матриці суміжності для дерева обходу
         const treeMatrix = Array.from({length: n}, () => Array(n).fill(0));
         traversalTree.forEach(edge => {
             treeMatrix[edge.from][edge.to] = 1;
@@ -440,13 +438,8 @@ document.addEventListener("DOMContentLoaded", () => {
             if (next === -1) {
                 btnNextStep.disabled = true;
                 drawGraph(matrix, true);
-
-                const treeMatrix = createTreeMatrix();
-                printMatrix(treeMatrix, 'Tree matrix');
-
-                console.log("\nVertex visiting order :");
-                console.log(order.map(v => v + 1).join(" -> "));
-
+                printMatrix(createTreeMatrix(), "Tree adjacency (DFS)");
+                console.log("\nOrder:", order.map(v => v + 1).join(" → "));
                 return;
             }
             visited[next] = "discovered";
@@ -457,21 +450,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const v = traversalStack.pop();
         visited[v] = "current";
-        const edges = [];
+
         for (let i = n - 1; i >= 0; i--) {
             if (matrix[v][i] && visited[i] === "unvisited") {
+                traversalStack.push(v);
                 visited[i] = "discovered";
                 traversalStack.push(i);
                 traversalTree.push({from: v, to: i});
-                edges.push({from: v, to: i});
+                drawGraph(matrix, true, [{from: v, to: i}]);
+                return;
             }
         }
 
         visited[v] = "visited";
-        order.push(v); // Додаємо вершину до порядку відвідування
+        order.push(v);
         logTraversalState();
-        drawGraph(matrix, true, edges);
+        drawGraph(matrix, true);
     }
+
 
     const dirMatrix = genDirMatrix(k);
 
