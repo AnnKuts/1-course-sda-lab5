@@ -6,12 +6,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const n3 = 1;
     const n4 = 1;
     const n = 10 + n3;
-    const k = 1.0 - n3 * 0.01 - n4 * 0.005 - 0.15;   // variant‑specific k
+    const k = 1.0 - n3 * 0.01 - n4 * 0.005 - 0.15;
 
     const w = canvas.width;
     const h = canvas.height;
     const RAD = 15;
-    const centerX = w * 0.35; // Посунув вправо (було 0.25)
+    const centerX = w * 0.3;
     const centerY = h * 0.5;
     const radius = 180;
 
@@ -21,6 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let traversalTree = [];
     let traversalMode = null;
     let nodesInTree = new Set();
+    let order = [];
 
     const COLORS = {
         edge: {
@@ -328,6 +329,15 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    function createTreeMatrix() {
+        // Створення матриці суміжності для дерева обходу
+        const treeMatrix = Array.from({length: n}, () => Array(n).fill(0));
+        traversalTree.forEach(edge => {
+            treeMatrix[edge.from][edge.to] = 1;
+        });
+        return treeMatrix;
+    }
+
     function logTraversalState() {
         if (traversalTree.length) {
             console.clear();
@@ -353,6 +363,7 @@ document.addEventListener("DOMContentLoaded", () => {
         traversalTree = [];
         nodesInTree.clear();
         traversalMode = null;
+        order = [];
         console.clear();
         console.log("Traversal reset");
         btnNextStep.disabled = true;
@@ -368,7 +379,7 @@ document.addEventListener("DOMContentLoaded", () => {
         visited[start] = "discovered";
         traversalQueue.push(start);
         drawGraph(matrix, true);
-        btnNextStep.disabled = false; // Активуємо кнопку Next Step після вибору BFS
+        btnNextStep.disabled = false;
     }
 
     function initDFS(matrix) {
@@ -381,17 +392,22 @@ document.addEventListener("DOMContentLoaded", () => {
         visited[start] = "discovered";
         traversalStack.push(start);
         drawGraph(matrix, true);
-        btnNextStep.disabled = false; // Активуємо кнопку Next Step після вибору DFS
+        btnNextStep.disabled = false;
     }
 
     function performBFSStep(matrix) {
         if (!traversalQueue.length) {
-            // handle disconnected parts
             const next = visited.findIndex((v, idx) => v === "unvisited" && matrix[idx].some(x => x));
             if (next === -1) {
                 btnNextStep.disabled = true;
                 drawGraph(matrix, true);
-                logTraversalState();
+
+                const treeMatrix = createTreeMatrix();
+                printMatrix(treeMatrix, 'Tree adjacency matrix');
+
+                console.log("\nVertex visiting order (starting from 1):");
+                console.log(order.map(v => v + 1).join(" -> "));
+
                 return;
             }
             visited[next] = "discovered";
@@ -413,6 +429,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
         visited[v] = "visited";
+        order.push(v);
         logTraversalState();
         drawGraph(matrix, true, edges);
     }
@@ -423,7 +440,13 @@ document.addEventListener("DOMContentLoaded", () => {
             if (next === -1) {
                 btnNextStep.disabled = true;
                 drawGraph(matrix, true);
-                logTraversalState();
+
+                const treeMatrix = createTreeMatrix();
+                printMatrix(treeMatrix, 'Tree matrix');
+
+                console.log("\nVertex visiting order :");
+                console.log(order.map(v => v + 1).join(" -> "));
+
                 return;
             }
             visited[next] = "discovered";
@@ -445,19 +468,18 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         visited[v] = "visited";
+        order.push(v); // Додаємо вершину до порядку відвідування
         logTraversalState();
         drawGraph(matrix, true, edges);
     }
 
     const dirMatrix = genDirMatrix(k);
 
-
     const btnDirected = document.getElementById("btnDirected");
     const btnBFS = document.getElementById("btnBFS");
     const btnDFS = document.getElementById("btnDFS");
     const btnNextStep = document.getElementById("btnNextStep");
     const btnReset = document.getElementById("btnReset");
-
 
     btnDirected.onclick = () => {
         console.clear();
@@ -476,7 +498,7 @@ document.addEventListener("DOMContentLoaded", () => {
         } else if (traversalMode === "DFS") {
             performDFSStep(dirMatrix);
         } else {
-            console.log("Please select a traversal algorithm first (BFS or DFS)");
+            console.log("Please select algorithm first (BFS or DFS)");
             btnNextStep.disabled = true;
         }
     };
